@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Список студентов</string>
+    <string name="facs_list">Список факультетов</string>
+    <string-array name="marks">
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+    </string-array>
+</resources>
