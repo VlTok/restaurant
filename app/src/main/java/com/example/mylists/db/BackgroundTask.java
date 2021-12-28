@@ -27,22 +27,22 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
             case "add_info": {
                 SQLiteDatabase db = dbOperations.getWritableDatabase();
                 Dish dish = gson.fromJson(strings[1], Dish.class);
-                Log.d("Add", dish.getFIO());
-                dbOperations.addInfoStudent(db, dish);
+                Log.d("Add", dish.getTitle());
+                dbOperations.addInfoDish(db, dish);
                 break;
             }
-            case "delete_student": {
+            case "delete_dish": {
                 SQLiteDatabase db = dbOperations.getWritableDatabase();
                 Dish dish = gson.fromJson(strings[1], Dish.class);
-                Log.d("Delete", dish.getFIO());
-                dbOperations.deleteStudent(db, dish);
+                Log.d("Delete", dish.getTitle());
+                dbOperations.deleteDish(db, dish);
                 break;
             }
-            case "get_students": {
+            case "get_dishes": {
                 SQLiteDatabase db = dbOperations.getReadableDatabase();
-                int facultyId = Integer.parseInt(strings[1]);
-                Log.d("Get ", "students");
-                dbOperations.getAllStudents(db, facultyId);
+                int categoryId = Integer.parseInt(strings[1]);
+                Log.d("Get ", "dishes");
+                dbOperations.getAllDishes(db, categoryId);
                 break;
             }
             case "get_categories": {
@@ -58,7 +58,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        MainActivity.loadFacultyIntoNavigationView();
+        MainActivity.loadCategoryIntoNavigationView();
         MainActivity.mDishListAdapter.notifyDataSetChanged();
     }
 }

@@ -24,7 +24,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_info_student"
+        android:id="@+id/ll_info_dish"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="615dp"
@@ -36,7 +36,7 @@
         android:visibility="gone"
         >
         <LinearLayout
-            android:id="@+id/llInfo_FIO"
+            android:id="@+id/llInfo_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -49,10 +49,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textColor="@color/detailingWindowFont"
-                android:text="ФИО" />
+                android:text="Наименование" />
 
             <TextView
-                android:id="@+id/tvInfo_FIO"
+                android:id="@+id/tvInfo_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
@@ -62,7 +62,33 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llInfo_Fac"
+            android:id="@+id/llInfo_Code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textColor="@color/detailingWindowFont"
+                android:text="Наименование" />
+
+            <TextView
+                android:id="@+id/tvInfo_Code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:textColor="@color/detailingWindowFont"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llInfo_Category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
@@ -76,10 +102,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textColor="@color/detailingWindowFont"
-                android:text="Факультет" />
+                android:text="Категория" />
 
             <TextView
-                android:id="@+id/tvInfo_Fac"
+                android:id="@+id/tvInfo_Category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
@@ -87,33 +113,6 @@
                 android:textColor="@color/detailingWindowFont"
                 android:text="TextView" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llInfo_Group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:textColor="@color/detailingWindowFont"
-                android:text="Группа" />
-
-            <TextView
-                android:id="@+id/tvInfo_Group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="1"
-                android:textColor="@color/detailingWindowFont"
-                android:text="TextView" />
         </LinearLayout>
 
     </LinearLayout>

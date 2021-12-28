@@ -34,16 +34,16 @@ public class DishInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_info);
+        setContentView(R.layout.activity_dish_info);
         checkedItemPosition = -1;
         currentIdCategoryChose = getIntent().getIntExtra("currentCategory", -1);
-        s = getIntent().getParcelableExtra("student");
+        s = getIntent().getParcelableExtra("dish");
         categories = getIntent().getParcelableArrayListExtra("categories");
-        System.out.println("categories in StudentInfoActivity " + categories);
+        System.out.println("categories in DishInfoActivity " + categories);
 
-        ((EditText) findViewById(R.id.editFIO)).setText(s.getFIO());
+        ((EditText) findViewById(R.id.editTitle)).setText(s.getTitle());
         /**
-         *  Спиннер для выбора факультета
+         *  Спиннер для выбора категории блюда
          */
         mySpinner = (Spinner) findViewById(R.id.editCategory);
         categoryListAdapter = new CategoryListAdapter(this, android.R.layout.simple_spinner_item, categories);
@@ -62,18 +62,20 @@ public class DishInfoActivity extends AppCompatActivity {
         });
         mySpinner.setSelection(s.getIdCategory() - 1);
 
-        ((EditText) findViewById(R.id.editGroup)).setText(s.getGroup());
+        ((EditText) findViewById(R.id.editDescription)).setText(s.getDesciption());
+        ((EditText) findViewById(R.id.editCode)).setText(s.getCode());
     }
 
     public void clSave(View view) {
-        s.setFIO(((EditText) findViewById(R.id.editFIO)).getText().toString());
-        s.setGroup(((EditText) findViewById(R.id.editGroup)).getText().toString());
+        s.setTitle(((EditText) findViewById(R.id.editTitle)).getText().toString());
+        s.setCode(((EditText) findViewById(R.id.editCode)).getText().toString());
+        s.setDescription(((EditText) findViewById(R.id.editDescription)).getText().toString());
         Category category = categoryListAdapter.getItem(mySpinner.getSelectedItemPosition());
         s.setIdCategory(category.getId());
         s.setNameCategory(category.getName());
         saveData(s);
         Intent intent = new Intent();
-        intent.putExtra("student",s);
+        intent.putExtra("dish",s);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -83,7 +85,7 @@ public class DishInfoActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED, intent);
         finish();
     }
-    public int getIdFaculty(String name) {
+    public int getIdCategory(String name) {
         for(Category category : categories) {
             if(category.getName().equals(name)) {
                 return category.getId();
@@ -91,28 +93,32 @@ public class DishInfoActivity extends AppCompatActivity {
         }
         return -1;
     }
-    public String getNameFaculty() {
-        String nameFaculty = "";
+    public String getNameCategory() {
+        String nameCategory = "";
         for(Category category : categories) {
             if(category.getId() == currentIdCategoryChose) {
-                nameFaculty = category.getName();
+                nameCategory = category.getName();
             }
         }
-        return nameFaculty;
+        return nameCategory;
     }
     @Override
     public void onBackPressed() {
         boolean err = false;
-        if(TextUtils.isEmpty(((EditText) findViewById(R.id.editFIO)).getText().toString())){
-            ((EditText) findViewById(R.id.editFIO)).setError("Не указано ФИО");
+        if(TextUtils.isEmpty(((EditText) findViewById(R.id.editTitle)).getText().toString())){
+            ((EditText) findViewById(R.id.editTitle)).setError("Не указано название");
             err = true;
         }
         if(!mySpinner.isSelected()){
             s.setIdCategory(currentIdCategoryChose);
-            s.setNameCategory(getNameFaculty());
+            s.setNameCategory(getNameCategory());
         }
-        if(TextUtils.isEmpty(((EditText) findViewById(R.id.editGroup)).getText().toString())){
-            ((EditText) findViewById(R.id.editGroup)).setError("Не указана группа");
+        if(TextUtils.isEmpty(((EditText) findViewById(R.id.editDescription)).getText().toString())){
+            ((EditText) findViewById(R.id.editDescription)).setError("Не указано описание");
+            err = true;
+        }
+        if(TextUtils.isEmpty(((EditText) findViewById(R.id.editCode)).getText().toString())){
+            ((EditText) findViewById(R.id.editCode)).setError("Не указан код блюда");
             err = true;
         }
         AlertDialog.Builder quitDialog = new AlertDialog.Builder(
@@ -139,7 +145,7 @@ public class DishInfoActivity extends AppCompatActivity {
         else {
             quitDialog = new AlertDialog.Builder(
                     this);
-            quitDialog.setTitle("Закрыть дополнительную информацию о студенте?")
+            quitDialog.setTitle("Закрыть информацию о блюде?")
                     .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -162,7 +168,7 @@ public class DishInfoActivity extends AppCompatActivity {
         // проверка на существование записи о студенте
         // если есть запись, то изменить студента
         // если нет то этот блок
-        System.out.println("student " + dish);
+        System.out.println("dish " + dish);
         BackgroundTask backgroundTask = new BackgroundTask(this);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();

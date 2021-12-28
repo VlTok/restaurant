@@ -30,8 +30,8 @@ import android.widget.Toast;
 import com.example.mylists.R;
 import com.example.mylists.adapter.DishListAdapter;
 import com.example.mylists.compare.CompareByCategory;
-import com.example.mylists.compare.CompareByFio;
-import com.example.mylists.compare.CompareByGroup;
+import com.example.mylists.compare.CompareByCode;
+import com.example.mylists.compare.CompareByTitle;
 import com.example.mylists.db.BackgroundTask;
 import com.example.mylists.model.Category;
 import com.example.mylists.model.Dish;
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("StaticFieldLeak")
     public static DishListAdapter mDishListAdapter;
     public static ArrayList<Category> mCategories;
-    public static int mFacultySelectedId = -1;
-    public static Map<Integer, ArrayList<Dish>> mapIdFacultyToStudents;
+    public static int mCategorySelectedId = -1;
+    public static Map<Integer, ArrayList<Dish>> mapIdCategoryToDishes;
     private static DrawerLayout drawer;
     private static NavigationView navigationView;
     private static boolean was_updated = false;
@@ -63,17 +63,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_ll);
+        setContentView(R.layout.main_two);
         checkedItemPosition = -1;
-        if(mapIdFacultyToStudents == null) {
-            mapIdFacultyToStudents = new HashMap<>();
+        if(mapIdCategoryToDishes == null) {
+            mapIdCategoryToDishes = new HashMap<>();
         }
         was_updated = false;
-        //если программа открывется в первый раз, создаём список студентов
-        //если список пустой, проверяем, нет ли сохранённых данных о студентах. Если есть - добавляем в список.
-        createFacultetList();
-        if(mDishes == null) createStudentList();
-        loadStudents();
+        //если программа открывется в первый раз, создаём список блюд
+        //если список пустой, проверяем, нет ли сохранённых данных о блюдах. Если есть - добавляем в список.
+        createCategoryList();
+        if(mDishes == null) createDishList();
+        loadDishes();
 
         ActionBar toolbar = getSupportActionBar();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        loadFacultyIntoNavigationView();
+        loadCategoryIntoNavigationView();
         navigationView.setNavigationItemSelectedListener(this);
         toolbar.setDisplayHomeAsUpEnabled(true);
 
@@ -96,33 +96,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onActivityResult(ActivityResult result) {
                         if(result.getResultCode() == Activity.RESULT_OK) {
                             Intent intent = result.getData();
-                            Dish s = intent.getParcelableExtra("student");
+                            Dish s = intent.getParcelableExtra("dish");
                             if(mPosition  == mDishes.size() + 1) {
-                                if(s.getIdCategory() != mFacultySelectedId) {
-                                    ArrayList<Dish> oldDish = mapIdFacultyToStudents.get(s.getIdCategory());
+                                if(s.getIdCategory() != mCategorySelectedId) {
+                                    ArrayList<Dish> oldDish = mapIdCategoryToDishes.get(s.getIdCategory());
                                     if(oldDish == null) {
                                         oldDish = new ArrayList<Dish>();
                                     }
                                     oldDish.add(s);
-                                    mapIdFacultyToStudents.put(s.getIdCategory(), oldDish);
+                                    mapIdCategoryToDishes.put(s.getIdCategory(), oldDish);
                                 }
                                 else mDishes.add(s);
                             }
                             else {
-                                if(s.getIdCategory() != mFacultySelectedId) {
-                                    ArrayList<Dish> oldDish = mapIdFacultyToStudents.get(s.getIdCategory());
+                                if(s.getIdCategory() != mCategorySelectedId) {
+                                    ArrayList<Dish> oldDish = mapIdCategoryToDishes.get(s.getIdCategory());
                                     if(oldDish == null) {
                                         oldDish = new ArrayList<Dish>();
                                     }
                                     oldDish.add(s);
-                                    mapIdFacultyToStudents.put(s.getIdCategory(), oldDish);
+                                    mapIdCategoryToDishes.put(s.getIdCategory(), oldDish);
                                     mDishes.remove(mPosition);
                                 }
                                 else mDishes.set(mPosition, s);
                             }
                             mDishListAdapter.notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(),
-                                    "Студент: " + s.getFIO().toString() + "\nУспешно сохранён", Toast.LENGTH_SHORT).show();
+                                    "Блюдо: " + s.getTitle().toString() + "\nУспешно сохранено", Toast.LENGTH_SHORT).show();
                         }else if (result.getResultCode() == Activity.RESULT_CANCELED){
 
                         }
@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
         );
 
-        View.OnLongClickListener OLCL_FIO= new View.OnLongClickListener() {
+        View.OnLongClickListener OLCL_TITLE= new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Collections.sort(mDishes,new CompareByFio());
+                Collections.sort(mDishes,new CompareByTitle());
                 mDishListAdapter.notifyDataSetChanged();
-                ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.GONE);
+                ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.GONE);
                 ListView listView = findViewById(R.id.lvList2);
                 listView.setItemChecked(checkedItemPosition,false);
                 listView.setSelected(false);
@@ -144,12 +144,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        View.OnLongClickListener OLCL_Fac= new View.OnLongClickListener() {
+        View.OnLongClickListener OLCL_CATEGORY= new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Collections.sort(mDishes,new CompareByCategory());
                 mDishListAdapter.notifyDataSetChanged();
-                ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.GONE);
+                ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.GONE);
                 ListView listView = findViewById(R.id.lvList2);
                 listView.setItemChecked(checkedItemPosition,false);
                 listView.setSelected(false);
@@ -158,12 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        View.OnLongClickListener OLCL_Group= new View.OnLongClickListener() {
+        View.OnLongClickListener OLCL_CODE= new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Collections.sort(mDishes,new CompareByGroup());
+                Collections.sort(mDishes,new CompareByCode());
                 mDishListAdapter.notifyDataSetChanged();
-                ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.GONE);
+                ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.GONE);
                 ListView listView = findViewById(R.id.lvList2);
                 listView.setItemChecked(checkedItemPosition,false);
                 listView.setSelected(false);
@@ -172,26 +172,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        ((LinearLayout) findViewById(R.id.llInfo_FIO)).setOnLongClickListener(OLCL_FIO);
-        ((TextView) findViewById(R.id.tvInfo_FIO)).setOnLongClickListener(OLCL_FIO);
-        ((TextView) findViewById(R.id.textView7)).setOnLongClickListener(OLCL_FIO);
-        ((LinearLayout) findViewById(R.id.llInfo_Fac)).setOnLongClickListener(OLCL_Fac);
-        ((TextView) findViewById(R.id.tvInfo_Fac)).setOnLongClickListener(OLCL_Fac);
-        ((TextView) findViewById(R.id.textView14)).setOnLongClickListener(OLCL_Fac);
-        ((LinearLayout) findViewById(R.id.llInfo_Group)).setOnLongClickListener(OLCL_Group);
-        ((TextView) findViewById(R.id.tvInfo_Group)).setOnLongClickListener(OLCL_Group);
-        ((TextView) findViewById(R.id.textView18)).setOnLongClickListener(OLCL_Group);
+        ((LinearLayout) findViewById(R.id.llInfo_Title)).setOnLongClickListener(OLCL_TITLE);
+        ((TextView) findViewById(R.id.tvInfo_Title)).setOnLongClickListener(OLCL_TITLE);
+        ((TextView) findViewById(R.id.textView7)).setOnLongClickListener(OLCL_TITLE);
+        ((LinearLayout) findViewById(R.id.llInfo_Category)).setOnLongClickListener(OLCL_CATEGORY);
+        ((TextView) findViewById(R.id.tvInfo_Category)).setOnLongClickListener(OLCL_CATEGORY);
+        ((TextView) findViewById(R.id.textView14)).setOnLongClickListener(OLCL_CATEGORY);
+        ((LinearLayout) findViewById(R.id.llInfo_Code)).setOnLongClickListener(OLCL_CODE);
+        ((TextView) findViewById(R.id.tvInfo_Code)).setOnLongClickListener(OLCL_CODE);
+        ((TextView) findViewById(R.id.textView15)).setOnLongClickListener(OLCL_CODE);
     }
 
     /**
-     * Загрузка списка факультетов в меню навигации
+     * Загрузка списка категорий в меню навигации
      */
-    public static void loadFacultyIntoNavigationView() {
+    public static void loadCategoryIntoNavigationView() {
         Menu drawerMenu = navigationView.getMenu();
         if(mCategories != null && !mCategories.isEmpty()) {
             if(was_updated) return;
             for (Category category : mCategories) {
-
                 drawerMenu.add(category.getName()).setCheckable(true);
             }
             was_updated = true;
@@ -199,14 +198,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Загрузка списка студентов, если выбран факультет
+     * Загрузка списка блюд, если выбрана категория
      */
-    public void loadStudents() {
+    public void loadDishes() {
         if(mCategories == null) return;
-        Category currentCategory = getById(mFacultySelectedId);
+        Category currentCategory = getById(mCategorySelectedId);
         if(currentCategory != null) {
-            loadStudentsFromDB();
-            Log.d(TAG, "loaded students");
+            loadDishesFromDB();
+            Log.d(TAG, "loaded dishes");
         }
         mDishListAdapter.notifyDataSetChanged();
     }
@@ -217,28 +216,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param hidden
      */
     @SuppressLint("ResourceType")
-    public void hideMenuForStudents(Menu menu, boolean hidden) {
+    public void hideMenuForDishes(Menu menu, boolean hidden) {
         menu.findItem(R.id.miAdd).setVisible(!hidden);
         menu.findItem(R.id.miDelete).setVisible(!hidden);
         menu.findItem(R.id.miEdit).setVisible(!hidden);
     }
 
     /**
-     * Вызов функции сокрытия пунктов меню при отстутствии выбранного факультета
+     * Вызов функции сокрытия пунктов меню при отстутствии выбранной категории
      * @param menu
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(mFacultySelectedId != -1) {
-            hideMenuForStudents(menu, false);
+        if(mCategorySelectedId != -1) {
+            hideMenuForDishes(menu, false);
         } else {
-            hideMenuForStudents(menu, true);
+            hideMenuForDishes(menu, true);
         }
         return super.onPrepareOptionsMenu(menu);
     }
 
     /**
-     * Получения факультета по выбранному пункту меню навигации
+     * Получение категории по выбранному пункту меню навигации
      * @param id
      * @return
      */
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Получение факультета по названию
+     * Получение категории по названию
      * @param name
      * @return
      */
@@ -268,9 +267,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Загрузка списка факультетов
      */
-    public void createFacultetList() {
+    public void createCategoryList() {
         if(mCategories == null) mCategories = new ArrayList<>();
-        loadFacultets();
+        loadCategories();
     }
 
     /**
@@ -307,28 +306,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.miEdit:{
                 if(listView.isSelected()){
                     Intent intent = new Intent(MainActivity.this, DishInfoActivity.class);
-                    intent.putExtra("student", mDishes.get(position));
-                    intent.putParcelableArrayListExtra("facultets", mCategories);
-                    intent.putExtra("currentFacultet", mFacultySelectedId);
+                    intent.putExtra("dish", mDishes.get(position));
+                    intent.putParcelableArrayListExtra("categories", mCategories);
+                    intent.putExtra("currentCategory", mCategorySelectedId);
                     mPosition=position;
                     mIntentActivityResultLauncher.launch(intent);
                 }else {
                     Toast.makeText(getApplicationContext(),
-                            "Студент не выбран", Toast.LENGTH_SHORT).show();
+                            "Блюдо не выбрано", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
             case R.id.miAdd:{
                 Intent intent = new Intent(MainActivity.this, DishInfoActivity.class);
 
-                //mStudents.add(new Student("",getById(currentId),"", ""));
-                //intent.putExtra("student", mStudents.get(mStudents.size()-1));
                 Dish s = new Dish();
-                s.setIdCategory(mFacultySelectedId);
-                s.setNameCategory(getById(mFacultySelectedId).getName());
-                intent.putExtra("student", s);
-                intent.putExtra("currentFacultet", mFacultySelectedId);
-                intent.putParcelableArrayListExtra("facultets", mCategories);
+                s.setIdCategory(mCategorySelectedId);
+                s.setNameCategory(getById(mCategorySelectedId).getName());
+                intent.putExtra("dish", s);
+                intent.putExtra("currentCategory", mCategorySelectedId);
+                intent.putParcelableArrayListExtra("categories", mCategories);
                 mPosition= mDishes.size() + 1;
                 mIntentActivityResultLauncher.launch(intent);
                 return true;
@@ -337,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(listView.isSelected()) {
                     AlertDialog.Builder quitDialog = new AlertDialog.Builder(
                             MainActivity.this);
-                    quitDialog.setTitle("Удалить студента \"" + mDishes.get(position).getFIO() + "\"?");
+                    quitDialog.setTitle("Удалить блюдо \"" + mDishes.get(position).getTitle() + "\"?");
 
                     quitDialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                         @Override
@@ -356,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     quitDialog.show();
                 }else {
                     Toast.makeText(getApplicationContext(),
-                            "Студент не выбран", Toast.LENGTH_SHORT).show();
+                            "Блюдо не выбрано", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -379,34 +376,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Создание списка студентов
+     * Создание списка блюд
      */
-    public void createStudentList() {
+    public void createDishList() {
         mDishes =new ArrayList<>();
         ListView listView = findViewById(R.id.lvList2);
         mDishListAdapter =new DishListAdapter(mDishes,this);
         listView.setAdapter(mDishListAdapter);
-        AdapterView.OnItemClickListener clStudent = new AdapterView.OnItemClickListener() {
+        AdapterView.OnItemClickListener clDish = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if((((LinearLayout) findViewById(R.id.ll_info_student)).getVisibility()==View.GONE) || checkedItemPosition != position){
+                if((((LinearLayout) findViewById(R.id.ll_info_dish)).getVisibility()==View.GONE) || checkedItemPosition != position){
                     listView.setItemChecked(position,true);
                     listView.setSelected(true);
-                    ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.tvInfo_FIO)).setText(mDishes.get(position).getFIO());
-                    ((TextView) findViewById(R.id.tvInfo_Fac)).setText(mDishes.get(position).getNameCategory());
-                    ((TextView) findViewById(R.id.tvInfo_Group)).setText(mDishes.get(position).getGroup());
+                    ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.VISIBLE);
+                    ((TextView) findViewById(R.id.tvInfo_Title)).setText(mDishes.get(position).getTitle());
+                    ((TextView) findViewById(R.id.tvInfo_Category)).setText(mDishes.get(position).getNameCategory());
+                    ((TextView) findViewById(R.id.tvInfo_Code)).setText(mDishes.get(position).getCode());
                     checkedItemPosition = position;
                 }else {
-                    ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.GONE);
+                    ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.GONE);
                     listView.setItemChecked(position,false);
                     listView.setSelected(false);
                     checkedItemPosition = -1;
                 }
-//                mStudentListAdapter.colorChecked(position,parent);
             }
         };
-        listView.setOnItemClickListener(clStudent);
+        listView.setOnItemClickListener(clDish);
     }
 
     /**
@@ -433,20 +429,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Category category = getByName((String) item.getTitle());
         if(category != null) {
-            Log.d(TAG, "facultet not null");
+            Log.d(TAG, "category not null");
             ArrayList<Dish> oldDishes = new ArrayList<>();
             oldDishes.addAll(mDishes);
-            mapIdFacultyToStudents.put(mFacultySelectedId, oldDishes);
-            mFacultySelectedId = category.getId();
-            ((LinearLayout) findViewById(R.id.ll_info_student)).setVisibility(View.GONE);
+            mapIdCategoryToDishes.put(mCategorySelectedId, oldDishes);
+            mCategorySelectedId = (int) category.getId();
+            ((LinearLayout) findViewById(R.id.ll_info_dish)).setVisibility(View.GONE);
             ListView listView = findViewById(R.id.lvList2);
             listView.setItemChecked(checkedItemPosition,false);
             listView.setSelected(false);
             checkedItemPosition = -1;
-            loadStudents();
+            loadDishes();
         }
         else {
-            Log.d(TAG, "facultet is null");
+            Log.d(TAG, "category is null");
         }
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -462,13 +458,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     /**
-     * Сохранение общей инфы о студенте
+     * Сохранение общей инфы о блюде
      */
     public void saveData(Dish dish) {
         // проверка на существование записи о студенте
         // если есть запись, то изменить студента
         // если нет то этот блок
-        System.out.println("student " + dish);
+        System.out.println("dish " + dish);
         BackgroundTask backgroundTask = new BackgroundTask(this);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -477,13 +473,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Загрузка студентов из бд
+     * Загрузка блюд из бд
      */
-    public void loadStudentsFromDB() {
-        if(mFacultySelectedId != -1) {
+    public void loadDishesFromDB() {
+        if(mCategorySelectedId != -1) {
             mDishes.clear();
-            if(mapIdFacultyToStudents.containsKey(mFacultySelectedId)) {
-                ArrayList<Dish> oldDishes = mapIdFacultyToStudents.get(mFacultySelectedId);
+            if(mapIdCategoryToDishes.containsKey(mCategorySelectedId)) {
+                ArrayList<Dish> oldDishes = mapIdCategoryToDishes.get(mCategorySelectedId);
                 if(!oldDishes.isEmpty()) {
                     mDishes.addAll(oldDishes);
                     mDishListAdapter.notifyDataSetChanged();
@@ -494,30 +490,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 BackgroundTask backgroundTask = new BackgroundTask(this);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
-                backgroundTask.execute("get_students", String.valueOf(getById(mFacultySelectedId).getId()));
-                //mStudentListAdapter.notifyDataSetChanged();
+                backgroundTask.execute("get_dishes", String.valueOf(getById(mCategorySelectedId).getId()));
             }
         }
     }
 
     /**
-     * Удаление студента
+     * Удаление блюда
      * @param dish
      */
     public void deleteData(Dish dish) {
         BackgroundTask backgroundTask = new BackgroundTask(this);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        backgroundTask.execute("delete_student", gson.toJson(dish));
+        backgroundTask.execute("delete_dish", gson.toJson(dish));
     }
 
     /**
-     * Загрузка факультетов
+     * Загрузка категории
      */
-    public void loadFacultets() {
+    public void loadCategories() {
         if(mCategories.isEmpty()) {
             BackgroundTask backgroundTask = new BackgroundTask(this);
-            backgroundTask.execute("get_facultets");
+            backgroundTask.execute("get_categories");
         }
     }
 }

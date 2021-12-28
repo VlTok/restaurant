@@ -11,29 +11,34 @@ import android.widget.TextView;
 import com.example.mylists.model.Category;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CategoryListAdapter extends ArrayAdapter<Category> {
-   private Context context;
-   private ArrayList<Category> categories = new ArrayList<>();
+    private Context context;
+    private List<Category> categories = new ArrayList<>();
 
-   public CategoryListAdapter(Context context, int textViewResourceId, ArrayList<Category> categories) {
-       super(context, textViewResourceId, categories);
-       this.context = context;
-       this.categories = categories;
-   }
-   @Override
+    public CategoryListAdapter(Context context, int textViewResourceId, ArrayList<Category> categories) {
+        super(context, textViewResourceId, categories);
+        this.context = context;
+        this.categories = categories;
+    }
+
+    @Override
     public int getCount() {
-       return categories.size();
-   }
-   @Override
+        return categories.size();
+    }
+
+    @Override
     public Category getItem(int position) {
-       return categories.get(position);
-   }
-   @Override
+        return categories.get(position);
+    }
+
+    @Override
     public long getItemId(int position) {
-       return position;
-   }
+        return position;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
@@ -46,6 +51,7 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
         // And finally return your dynamic (or custom) view for each spinner item
         return label;
     }
+
     @Override
     public View getDropDownView(int position, View convertView,
                                 ViewGroup parent) {

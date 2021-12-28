@@ -8,7 +8,7 @@
     tools:context=".activity.DishInfoActivity">
 
     <LinearLayout
-        android:id="@+id/studentInput"
+        android:id="@+id/dishInput"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -26,15 +26,15 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginEnd="5dip"
                 android:layout_marginRight="5dip"
-                android:text="ФИО" />
+                android:text="Наименование блюда" />
 
             <EditText
-                android:id="@+id/editFIO"
+                android:id="@+id/editTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="ФИО студента"
+                android:hint="Наименование блюда"
                 android:inputType="textPersonName" />
         </LinearLayout>
 
@@ -56,7 +56,7 @@
                     android:layout_marginLeft="5dip"
                     android:layout_marginEnd="5dip"
                     android:layout_marginRight="5dip"
-                    android:text="Факультет" />
+                    android:text="Категория" />
 
                 <Spinner
                     android:id="@+id/editCategory"
@@ -65,6 +65,31 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginEnd="5dip"
+                    android:layout_marginRight="5dip"
+                    android:text="Код блюда" />
+
+                <EditText
+                    android:id="@+id/editCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Код блюда"
+                    android:inputType="textPersonName" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,32 +105,19 @@
                     android:layout_marginLeft="5dip"
                     android:layout_marginEnd="5dip"
                     android:layout_marginRight="5dip"
-                    android:text="Группа" />
+                    android:text="Описание" />
 
                 <EditText
-                    android:id="@+id/editGroup"
+                    android:id="@+id/editDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="textMultiLine" />
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ListView
-            android:id="@+id/lvASI_Subjects"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:choiceMode="singleChoice" />
     </LinearLayout>
 
 </LinearLayout>

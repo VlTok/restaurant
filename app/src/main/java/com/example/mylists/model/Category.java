@@ -27,7 +27,7 @@ public class Category implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
-        parcel.writeInt(id);
+        parcel.writeLong(id);
     }
 
     public Category(String name, int id) {

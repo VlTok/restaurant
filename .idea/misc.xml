@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.39114583333333336" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/activity_dish_info.xml" value="0.24909420289855072" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/all_dish_info.xml" value="0.24909420289855072" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/dish_element.xml" value="0.24909420289855072" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/main_ll.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/main_two.xml" value="0.24909420289855072" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/navigation_header.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/student_element.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/layout/subject_element.xml" value="0.13020833333333334" />
@@ -12,6 +16,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/menu/main_menu.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/menu/navigation_view_menu.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021-master/app/src/main/res/menu/student_menu.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/User/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/tatau/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021/app/src/main/res/layout/activity_student_info.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tatau/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021/app/src/main/res/layout/main_ll.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tatau/AndroidStudioProjects/PoluchuZachetPoAndroidu27122021/app/src/main/res/layout/navigation_header.xml" value="0.25416666666666665" />

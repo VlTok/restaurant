@@ -38,9 +38,9 @@ public class DishListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent){
-        view = mInflater.inflate(R.layout.student_element, parent, false);
+        view = mInflater.inflate(R.layout.dish_element, parent, false);
         if (mDishes.isEmpty()) return view;
-        ((TextView) view.findViewById(R.id.tvElementFIO)).setText(mDishes.get(position).getFIO());
+        ((TextView) view.findViewById(R.id.tvElementTitle)).setText(mDishes.get(position).getTitle());
 //        ((TextView) view.findViewById(R.id.tvElementFaculty)).setText(mStudents.get(position).getNameFaculty());
 //        ((TextView) view.findViewById(R.id.tvElementGroup)).setText(mStudents.get(position).getGroup());
 //        if(position%2==1) ((LinearLayout) view.findViewById(R.id.llElement)).setBackgroundColor(

@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/miAdd"
-        android:title="Добавить студента" />
+        android:title="Добавить блюдо" />
     <item
         android:id="@+id/miEdit"
-        android:title="Изменить студента" />
+        android:title="Изменить блюдо" />
     <item
         android:id="@+id/miDelete"
-        android:title="Удалить студента" />
+        android:title="Удалить блюдо" />
     <item
         android:id="@+id/miAbout"
         android:title="О программе" />

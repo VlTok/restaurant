@@ -10,15 +10,17 @@ import java.util.Objects;
 public class Dish implements Parcelable {
     private int id;
     private String mTitle;
+    private String mCode;
     private Integer IdCategory;
     private String nameCategory;
-    private String mGroup;
+    private String mDescription;
 
-    public Dish(String FIO, Category category, String group) {
-        mTitle = FIO;
+    public Dish(String title,String code, Category category, String description) {
+        mTitle = title;
+        mCode = code;
         nameCategory = category.getName();
         IdCategory = category.getId();
-        mGroup = group;
+        mDescription = description;
         id = -1;
     }
 
@@ -30,39 +32,28 @@ public class Dish implements Parcelable {
         this.id = id;
     }
 
-//    /**
-//     * Сравнение студентов
-//     * @return
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Student student = (Student) o;
-//        return id == student.id && mFIO.equals(student.mFIO) && IdFaculty.equals(student.IdFaculty) && nameFaculty.equals(student.nameFaculty) && mGroup.equals(student.mGroup) && Objects.equals(mSubjects, student.mSubjects);
-//    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(id, mTitle, IdCategory, nameCategory, mGroup);
+        return Objects.hash(id, mTitle,mCode, IdCategory, nameCategory, mDescription);
     }
 
     protected Dish(Parcel in) {
         mTitle = in.readString();
         nameCategory = in.readString();
         IdCategory = in.readInt();
-        mGroup = in.readString();
+        mCode = in.readString();
+        mDescription = in.readString();
         id = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);
+        dest.writeString(mCode);
         dest.writeString(nameCategory);
-        dest.writeInt(IdCategory);
-        dest.writeString(mGroup);
+        dest.writeLong(IdCategory);
+        dest.writeString(mDescription);
         dest.writeInt(id);
     }
 
@@ -83,7 +74,7 @@ public class Dish implements Parcelable {
         }
     };
 
-    public String getFIO() {
+    public String getTitle() {
         return mTitle;
     }
 
@@ -103,35 +94,44 @@ public class Dish implements Parcelable {
         this.nameCategory = nameCategory;
     }
 
-    public String getGroup() {
-        return mGroup;
+    public String getDesciption() {
+        return mDescription;
     }
 
-    public void setFIO(String FIO) {
-        mTitle = FIO;
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
+    public void setDescription(String description) {
+        mDescription = description;
+    }
 
+    public String getCode() {
+        return mCode;
+    }
 
-    public void setGroup(String group) {
-        mGroup = group;
+    public void setCode(String mCode) {
+        this.mCode = mCode;
     }
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Dish{" +
                 "id=" + id +
-                ", mFIO='" + mTitle + '\'' +
-                ", IdFaculty=" + IdCategory +
-                ", nameFaculty='" + nameCategory + '\'' +
-                ", mGroup='" + mGroup +
+                ", mTitle='" + mTitle + '\'' +
+                ", mCode='" + mCode + '\'' +
+                ", IdCategory=" + IdCategory +
+                ", nameCategory='" + nameCategory + '\'' +
+                ", mDescription='" + mDescription + '\'' +
                 '}';
     }
+
     public Dish() {
         mTitle = "";
+        mCode = "";
         nameCategory = "";
         IdCategory = -1;
-        mGroup = "";
+        mDescription = "";
         id = -1;
     }
 
@@ -139,8 +139,9 @@ public class Dish implements Parcelable {
         public static abstract class DishEntry {
             public static final String ID = "id";
             public static final String ID_CATEGORY = "id_category";
-            public static final String GROUP = "student_group";
-            public static final String FIO = "fio";
+            public static final String DESCRIPTION = "description";
+            public static final String TITLE = "title";
+            public static final String CODE = "code";
             public static final String TABLE_NAME = "dish_table";
         }
     }
