@@ -24,9 +24,8 @@ import java.util.ArrayList;
 
 public class DishInfoActivity extends AppCompatActivity {
 
-    private Dish s;
+    private Dish dish;
     private ArrayList<Category> categories;
-    private int checkedItemPosition;
     private Spinner mySpinner;
     private CategoryListAdapter categoryListAdapter;
     private int currentIdCategoryChose;
@@ -35,13 +34,12 @@ public class DishInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dish_info);
-        checkedItemPosition = -1;
-        currentIdCategoryChose = getIntent().getIntExtra("currentCategory", -1);
-        s = getIntent().getParcelableExtra("dish");
+        currentIdCategoryChose = getIntent().getIntExtra("currentCategory",-1);
+        dish = getIntent().getParcelableExtra("dish");
         categories = getIntent().getParcelableArrayListExtra("categories");
         System.out.println("categories in DishInfoActivity " + categories);
 
-        ((EditText) findViewById(R.id.editTitle)).setText(s.getTitle());
+        ((EditText) findViewById(R.id.editTitle)).setText(dish.getTitle());
         /**
          *  Спиннер для выбора категории блюда
          */
@@ -54,28 +52,28 @@ public class DishInfoActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
                 Category currentCategory = categoryListAdapter.getItem(position);
-                s.setIdCategory(currentCategory.getId());
-                s.setNameCategory(currentCategory.getName());
+                dish.setIdCategory(currentCategory.getId());
+                dish.setNameCategory(currentCategory.getName());
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {  }
         });
-        mySpinner.setSelection(s.getIdCategory() - 1);
+        mySpinner.setSelection(dish.getIdCategory() - 1);
 
-        ((EditText) findViewById(R.id.editDescription)).setText(s.getDesciption());
-        ((EditText) findViewById(R.id.editCode)).setText(s.getCode());
+        ((EditText) findViewById(R.id.editDescription)).setText(dish.getDescription());
+        ((EditText) findViewById(R.id.editCode)).setText(dish.getCode());
     }
 
     public void clSave(View view) {
-        s.setTitle(((EditText) findViewById(R.id.editTitle)).getText().toString());
-        s.setCode(((EditText) findViewById(R.id.editCode)).getText().toString());
-        s.setDescription(((EditText) findViewById(R.id.editDescription)).getText().toString());
+        dish.setTitle(((EditText) findViewById(R.id.editTitle)).getText().toString());
+        dish.setCode(((EditText) findViewById(R.id.editCode)).getText().toString());
+        dish.setDescription(((EditText) findViewById(R.id.editDescription)).getText().toString());
         Category category = categoryListAdapter.getItem(mySpinner.getSelectedItemPosition());
-        s.setIdCategory(category.getId());
-        s.setNameCategory(category.getName());
-        saveData(s);
+        dish.setIdCategory(category.getId());
+        dish.setNameCategory(category.getName());
+        saveData(dish);
         Intent intent = new Intent();
-        intent.putExtra("dish",s);
+        intent.putExtra("dish", dish);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -110,8 +108,8 @@ public class DishInfoActivity extends AppCompatActivity {
             err = true;
         }
         if(!mySpinner.isSelected()){
-            s.setIdCategory(currentIdCategoryChose);
-            s.setNameCategory(getNameCategory());
+            dish.setIdCategory(currentIdCategoryChose);
+            dish.setNameCategory(getNameCategory());
         }
         if(TextUtils.isEmpty(((EditText) findViewById(R.id.editDescription)).getText().toString())){
             ((EditText) findViewById(R.id.editDescription)).setError("Не указано описание");

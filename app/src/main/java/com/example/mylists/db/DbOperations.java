@@ -114,7 +114,7 @@ public class DbOperations extends SQLiteOpenHelper {
             contentValues.put(Dish.DishContract.DishEntry.ID_CATEGORY, dish.getIdCategory());
             contentValues.put(Dish.DishContract.DishEntry.TITLE, dish.getTitle());
             contentValues.put(Dish.DishContract.DishEntry.CODE, dish.getCode());
-            contentValues.put(Dish.DishContract.DishEntry.DESCRIPTION, dish.getDesciption());
+            contentValues.put(Dish.DishContract.DishEntry.DESCRIPTION, dish.getDescription());
             db.insert(Dish.DishContract.DishEntry.TABLE_NAME, null, contentValues);
             Log.d(TAG, "One row inserted...");
         }
@@ -144,7 +144,7 @@ public class DbOperations extends SQLiteOpenHelper {
         contentValues.put(Dish.DishContract.DishEntry.ID_CATEGORY, dish.getIdCategory());
         contentValues.put(Dish.DishContract.DishEntry.TITLE, dish.getTitle());
         contentValues.put(Dish.DishContract.DishEntry.CODE, dish.getCode());
-        contentValues.put(Dish.DishContract.DishEntry.DESCRIPTION, dish.getDesciption());
+        contentValues.put(Dish.DishContract.DishEntry.DESCRIPTION, dish.getDescription());
         db.update(Dish.DishContract.DishEntry.TABLE_NAME, contentValues, Dish.DishContract.DishEntry.ID + " = ?", new String[] {String.valueOf(dish.getId())});
     }
 
@@ -202,7 +202,7 @@ public class DbOperations extends SQLiteOpenHelper {
                     cursor.getColumnIndex(Dish.DishContract.DishEntry.CODE));
             @SuppressLint("Range") String description = cursor.getString(
                     cursor.getColumnIndex(Dish.DishContract.DishEntry.DESCRIPTION));
-            Dish dish = new Dish(title,code, getCategoryById(db, id_category), description);
+            Dish dish = new Dish(title, getCategoryById(db, id_category), code, description);
             dish.setId(id);
             MainActivity.mDishes.add(dish);
         }

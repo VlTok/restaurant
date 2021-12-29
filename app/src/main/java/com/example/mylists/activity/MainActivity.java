@@ -320,10 +320,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.miAdd:{
                 Intent intent = new Intent(MainActivity.this, DishInfoActivity.class);
 
-                Dish s = new Dish();
-                s.setIdCategory(mCategorySelectedId);
-                s.setNameCategory(getById(mCategorySelectedId).getName());
-                intent.putExtra("dish", s);
+                Dish dish = new Dish();
+                dish.setIdCategory(mCategorySelectedId);
+                dish.setNameCategory(getById(mCategorySelectedId).getName());
+                intent.putExtra("dish", dish);
                 intent.putExtra("currentCategory", mCategorySelectedId);
                 intent.putParcelableArrayListExtra("categories", mCategories);
                 mPosition= mDishes.size() + 1;
@@ -364,6 +364,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 infoDialog.setCancelable(false);
                 infoDialog.setPositiveButton("Прочитано", null);
                 infoDialog.show();
+                return true;
+            }
+            case R.id.miViewDataDish:{
+                if(listView.isSelected()){
+                    AlertDialog.Builder infoDialog = new AlertDialog.Builder(MainActivity.this);
+                    infoDialog.setTitle("О блюде");
+                    Dish dish = mDishes.get(position);
+                    infoDialog.setMessage("Наименование: "+dish.getTitle()+"\n"
+                    +"Код блюда: "+dish.getCode()+"\n"
+                    +"Категория: "+dish.getNameCategory()+"\n"
+                    +"Описание: "+dish.getDescription());
+                    infoDialog.setCancelable(false);
+                    infoDialog.setPositiveButton("Прочитано", null);
+                    infoDialog.show();
+                }else {
+                    Toast.makeText(getApplicationContext(),
+                            "Блюдо не выбрано", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
             case R.id.miExit:{

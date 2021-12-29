@@ -10,16 +10,16 @@ import java.util.Objects;
 public class Dish implements Parcelable {
     private int id;
     private String mTitle;
-    private String mCode;
     private Integer IdCategory;
     private String nameCategory;
+    private String mCode;
     private String mDescription;
 
-    public Dish(String title,String code, Category category, String description) {
+    public Dish(String title, Category category, String code, String description) {
         mTitle = title;
-        mCode = code;
         nameCategory = category.getName();
         IdCategory = category.getId();
+        mCode = code;
         mDescription = description;
         id = -1;
     }
@@ -35,7 +35,7 @@ public class Dish implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(id, mTitle,mCode, IdCategory, nameCategory, mDescription);
+        return Objects.hash(id, mTitle, IdCategory, nameCategory,mCode, mDescription);
     }
 
     protected Dish(Parcel in) {
@@ -50,9 +50,9 @@ public class Dish implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);
-        dest.writeString(mCode);
         dest.writeString(nameCategory);
-        dest.writeLong(IdCategory);
+        dest.writeInt(IdCategory);
+        dest.writeString(mCode);
         dest.writeString(mDescription);
         dest.writeInt(id);
     }
@@ -93,8 +93,11 @@ public class Dish implements Parcelable {
     public void setNameCategory(String nameCategory) {
         this.nameCategory = nameCategory;
     }
+    public String getCode() {
+        return mCode;
+    }
 
-    public String getDesciption() {
+    public String getDescription() {
         return mDescription;
     }
 
@@ -106,10 +109,6 @@ public class Dish implements Parcelable {
         mDescription = description;
     }
 
-    public String getCode() {
-        return mCode;
-    }
-
     public void setCode(String mCode) {
         this.mCode = mCode;
     }
@@ -119,18 +118,18 @@ public class Dish implements Parcelable {
         return "Dish{" +
                 "id=" + id +
                 ", mTitle='" + mTitle + '\'' +
-                ", mCode='" + mCode + '\'' +
                 ", IdCategory=" + IdCategory +
                 ", nameCategory='" + nameCategory + '\'' +
+                ", mCode='" + mCode + '\'' +
                 ", mDescription='" + mDescription + '\'' +
                 '}';
     }
 
     public Dish() {
         mTitle = "";
-        mCode = "";
         nameCategory = "";
         IdCategory = -1;
+        mCode = "";
         mDescription = "";
         id = -1;
     }
@@ -140,8 +139,8 @@ public class Dish implements Parcelable {
             public static final String ID = "id";
             public static final String ID_CATEGORY = "id_category";
             public static final String DESCRIPTION = "description";
-            public static final String TITLE = "title";
             public static final String CODE = "code";
+            public static final String TITLE = "title";
             public static final String TABLE_NAME = "dish_table";
         }
     }
